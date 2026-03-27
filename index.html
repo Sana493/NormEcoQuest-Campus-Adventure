@@ -3,74 +3,176 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NormEcoQuest: Campus Adventure</title>
+    <title>EcoQuest: Campus Adventure</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-
-    <header>
-        <h1>💚 NormEcoQuest</h1>
-        <h2 class="subtitle">Campus Adventure at UNC Charlotte</h2>
-    </header>
-
-    <nav>
-        <button class="tab active">Quests</button>
-        <button class="tab">Leaderboard</button>
-        <button class="tab">Impact</button>
-        <button class="tab">Rewards</button>
-    </nav>
-
-    <section class="card">
-        <h3>Today's Campus Quests</h3>
-        <ul class="quest-list">
-            <li class="quest">
-                <div>
-                    <strong>Cook with leftovers</strong>
-                    <p>Reduce food waste and earn coins.</p>
+    <div class="app-shell">
+        <header class="hero">
+            <div class="hero-copy">
+                <p class="eyebrow">UNC Charlotte Sustainability Challenge</p>
+                <h1>EcoQuest: Campus Adventure</h1>
+                <p class="subtitle">Turn daily eco habits into coins, streaks, and campus rewards.</p>
+            </div>
+            <div class="hero-stats">
+                <div class="stat-chip">
+                    <span class="stat-label">Coins</span>
+                    <strong id="coin-total">0</strong>
                 </div>
-                <span class="coins">+10</span>
-            </li>
-
-            <li class="quest">
-                <div>
-                    <strong>Turn off lights</strong>
-                    <p>Fight the Energy Goblin.</p>
+                <div class="stat-chip">
+                    <span class="stat-label">XP</span>
+                    <strong id="xp-total">0</strong>
                 </div>
-                <span class="coins">+5</span>
-            </li>
-
-            <li class="quest">
-                <div>
-                    <strong>Share unused food</strong>
-                    <p>Help other Niners and reduce waste.</p>
+                <div class="stat-chip">
+                    <span class="stat-label">Streak</span>
+                    <strong id="streak-total">1 days</strong>
                 </div>
-                <span class="coins">+10</span>
-            </li>
+            </div>
+        </header>
 
-            <li class="quest">
-                <div>
-                    <strong>Shorter shower</strong>
-                    <p>Save water and energy.</p>
+        <section class="player-panel card">
+            <div>
+                <p class="panel-label">Active Tier</p>
+                <h2 id="tier-name">The Owl</h2>
+                <p id="tier-description">Starter tier for students beginning their eco streak.</p>
+            </div>
+            <div class="tier-progress-wrap">
+                <div class="tier-progress-meta">
+                    <span id="tier-progress-text">0 / 40 XP to Pickaxe Pro</span>
+                    <span id="completion-count">0 of 4 quests completed</span>
                 </div>
-                <span class="coins">+5</span>
-            </li>
-        </ul>
-    </section>
+                <div class="progress-track">
+                    <div class="progress-fill" id="tier-progress-fill"></div>
+                </div>
+            </div>
+        </section>
 
-    <section class="card">
-        <h3>UNC Charlotte Tier System</h3>
-        <ul class="tiers">
-            <li><strong>🦉 The Owl</strong> — Starter tier</li>
-            <li><strong>⛏️ Pickaxe Pro</strong> — Bronze tier</li>
-            <li><strong>💎 Prospector</strong> — Silver tier</li>
-            <li><strong>⭐ Norm’s Inner Circle</strong> — Gold tier</li>
-        </ul>
-    </section>
+        <nav class="tab-bar" aria-label="Primary">
+            <button class="tab active" data-tab="quests">Quests</button>
+            <button class="tab" data-tab="leaderboard">Leaderboard</button>
+            <button class="tab" data-tab="impact">Impact</button>
+            <button class="tab" data-tab="rewards">Rewards</button>
+        </nav>
 
-    <footer>
-        <p>NormEcoQuest: Built for Niners 💚</p>
-    </footer>
+        <main>
+            <section class="tab-panel active" data-panel="quests">
+                <div class="grid-layout">
+                    <section class="card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="panel-label">Daily Level Map</p>
+                                <h3>Today's Campus Quests</h3>
+                            </div>
+                            <span class="boss-pill">Boss: Energy Goblin</span>
+                        </div>
+                        <div class="quest-list" id="quest-list"></div>
+                    </section>
 
+                    <section class="card side-card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="panel-label">Group Challenge</p>
+                                <h3>Dorm Boss Battle</h3>
+                            </div>
+                            <span class="boss-score" id="boss-score">18%</span>
+                        </div>
+                        <p class="muted">Your floor is battling the Energy Goblin by completing low-effort energy-saving actions.</p>
+                        <div class="progress-track boss-track">
+                            <div class="progress-fill boss-fill" id="boss-progress-fill"></div>
+                        </div>
+                        <div class="boss-metrics">
+                            <div>
+                                <span class="metric-label">Dorm progress</span>
+                                <strong id="boss-progress-text">18 / 100 goblin HP cleared</strong>
+                            </div>
+                            <div>
+                                <span class="metric-label">Bonus reward</span>
+                                <strong>Late-night cafe discount</strong>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+
+            <section class="tab-panel" data-panel="leaderboard">
+                <section class="card">
+                    <div class="card-heading">
+                        <div>
+                            <p class="panel-label">Social Proof</p>
+                            <h3>Dorm Leaderboard</h3>
+                        </div>
+                        <span class="ranking-pill" id="player-rank-pill">Rank #4</span>
+                    </div>
+                    <div class="leaderboard-list" id="leaderboard-list"></div>
+                </section>
+            </section>
+
+            <section class="tab-panel" data-panel="impact">
+                <div class="grid-layout impact-grid">
+                    <section class="card stat-card">
+                        <p class="panel-label">Food Saved</p>
+                        <h3 id="food-saved">0 meals</h3>
+                        <p class="muted">Leftovers used or shared before they spoiled.</p>
+                    </section>
+                    <section class="card stat-card">
+                        <p class="panel-label">Energy Reduced</p>
+                        <h3 id="energy-saved">0.0 kWh</h3>
+                        <p class="muted">Lights and appliances turned off when not needed.</p>
+                    </section>
+                    <section class="card stat-card">
+                        <p class="panel-label">Water Conserved</p>
+                        <h3 id="water-saved">0 gal</h3>
+                        <p class="muted">Shorter showers and smarter everyday choices.</p>
+                    </section>
+                    <section class="card stat-card">
+                        <p class="panel-label">Carbon Avoided</p>
+                        <h3 id="carbon-saved">0.0 lbs CO2</h3>
+                        <p class="muted">Small habits adding up across campus living spaces.</p>
+                    </section>
+                </div>
+            </section>
+
+            <section class="tab-panel" data-panel="rewards">
+                <div class="grid-layout">
+                    <section class="card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="panel-label">Campus Tiers</p>
+                                <h3>Eco Reward Path</h3>
+                            </div>
+                        </div>
+                        <div class="tier-list" id="tier-list"></div>
+                    </section>
+
+                    <section class="card side-card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="panel-label">Unlocked Perks</p>
+                                <h3>Reward Inventory</h3>
+                            </div>
+                        </div>
+                        <div class="reward-list" id="reward-list"></div>
+                    </section>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <template id="quest-template">
+        <article class="quest-card">
+            <div class="quest-copy">
+                <div class="quest-topline">
+                    <span class="quest-tag"></span>
+                    <span class="quest-value"></span>
+                </div>
+                <h4 class="quest-title"></h4>
+                <p class="quest-description"></p>
+                <p class="quest-impact"></p>
+            </div>
+            <button class="quest-action">Complete quest</button>
+        </article>
+    </template>
+
+    <script src="script.js"></script>
 </body>
 </html>
