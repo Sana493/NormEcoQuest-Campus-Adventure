@@ -56,7 +56,7 @@ const quests = [
         description: "Check your fridge, rescue ingredients, and plan one meal before anything goes bad.",
         impactText: "Impact: saves 2 meals and keeps waste out of the trash.",
         coins: 18,
-        xp: 16,
+        xp: 24,
         impact: { food: 2, energy: 0, water: 0, carbon: 2.4, boss: 12 }
     },
     {
@@ -67,7 +67,7 @@ const quests = [
         description: "Join a shared floor challenge and log one group action this week.",
         impactText: "Impact: boosts the boss battle and earns team progress.",
         coins: 20,
-        xp: 18,
+        xp: 28,
         impact: { food: 0, energy: 1.2, water: 6, carbon: 1.8, boss: 16 }
     }
 ];
@@ -150,12 +150,35 @@ const defaultState = {
 
 let state = loadState();
 
-const leaderboardBase = [
-    { name: "Maya - Oak Hall", score: 76, note: "Compost combo active" },
-    { name: "Jordan - Laurel", score: 68, note: "3-day streak" },
-    { name: "Avery - Pine", score: 59, note: "Food saver badge" },
-    { name: "You - Maple", score: 42, note: "Dorm quest runner" },
-    { name: "Chris - Cedar", score: 38, note: "Water wizard" }
+const dormCompetitionBase = [
+    {
+        name: "Maple Hall",
+        score: 76,
+        note: "Best overall utility drop this week",
+        excels: ["Electricity down 12%", "Highest quest participation", "Strong late-night light shutoff habits"],
+        needsWork: ["Water use still trending high", "Low food-sharing participation"]
+    },
+    {
+        name: "Laurel Hall",
+        score: 68,
+        note: "Most improved dorm",
+        excels: ["Water use down 9%", "Great shower challenge engagement", "Strong weekly quest completion"],
+        needsWork: ["Electricity reduction is inconsistent", "More students need to join team quests"]
+    },
+    {
+        name: "Oak Hall",
+        score: 59,
+        note: "Food systems leader",
+        excels: ["Best fridge clean-out completion", "Highest food rescue activity", "Strong compost culture"],
+        needsWork: ["Gas and hot water use remain elevated", "Needs better evening power-down habits"]
+    },
+    {
+        name: "Pine Hall",
+        score: 52,
+        note: "Solid middle-of-pack performance",
+        excels: ["Consistent recycling actions", "Balanced daily quest engagement"],
+        needsWork: ["Lowest leaderboard momentum", "Needs stronger dorm-wide participation"]
+    }
 ];
 
 const questList = document.querySelector("#quest-list");
@@ -178,6 +201,7 @@ const bossScore = document.querySelector("#boss-score");
 const bossProgressText = document.querySelector("#boss-progress-text");
 const bossProgressFill = document.querySelector("#boss-progress-fill");
 const playerRankPill = document.querySelector("#player-rank-pill");
+const topDormLabel = document.querySelector("#top-dorm-label");
 const foodSaved = document.querySelector("#food-saved");
 const energySaved = document.querySelector("#energy-saved");
 const waterSaved = document.querySelector("#water-saved");
@@ -347,11 +371,15 @@ function renderImpact() {
 }
 
 function getLeaderboard() {
-    const playerScore = 42 + state.coins + state.completedQuestIds.length * 4;
-    const board = leaderboardBase.map((player) =>
-        player.name.startsWith("You")
-            ? { ...player, score: playerScore, note: `${state.completedQuestIds.length} quests done today` }
-            : player
+    const playerBoost = state.completedQuestIds.length * 2 + state.redeemedRewardIds.length;
+    const board = dormCompetitionBase.map((dorm) =>
+        dorm.name === "Maple Hall"
+            ? {
+                ...dorm,
+                score: dorm.score + playerBoost,
+                note: playerBoost > 0 ? "Your dorm is gaining momentum" : dorm.note
+            }
+            : dorm
     );
 
     return board.sort((a, b) => b.score - a.score);
@@ -360,23 +388,54 @@ function getLeaderboard() {
 function renderLeaderboard() {
     const board = getLeaderboard();
     leaderboardList.innerHTML = "";
+    topDormLabel.textContent = board[0]?.name ?? "Maple Hall";
 
-    board.forEach((player, index) => {
+    board.forEach((dorm, index) => {
         const row = document.createElement("article");
         row.className = "leaderboard-row";
-        if (player.name.startsWith("You")) {
+        if (dorm.name === "Maple Hall") {
             row.classList.add("current-player");
             playerRankPill.textContent = `Rank #${index + 1}`;
         }
 
+        const detailsId = `dorm-details-${index}`;
         row.innerHTML = `
             <div class="rank-number">${index + 1}</div>
             <div>
-                <div class="player-name">${player.name}</div>
-                <div class="player-meta">${player.note}</div>
+                <div class="player-name">${dorm.name}</div>
+                <div class="player-meta">${dorm.note}</div>
             </div>
-            <div class="score-pill">${player.score} pts</div>
+            <div class="score-pill">${dorm.score} pts</div>
+            <button class="dorm-toggle" type="button" aria-expanded="false" aria-controls="${detailsId}">
+                View details
+            </button>
         `;
+
+        const details = document.createElement("div");
+        details.className = "dorm-details";
+        details.id = detailsId;
+        details.hidden = true;
+        details.innerHTML = `
+            <div class="dorm-detail-grid">
+                <div class="dorm-note good">
+                    <strong>Excelling</strong><br>
+                    ${dorm.excels.join("<br>")}
+                </div>
+                <div class="dorm-note risk">
+                    <strong>Needs work</strong><br>
+                    ${dorm.needsWork.join("<br>")}
+                </div>
+            </div>
+        `;
+        row.appendChild(details);
+
+        const toggle = row.querySelector(".dorm-toggle");
+        toggle.addEventListener("click", () => {
+            const isHidden = details.hidden;
+            details.hidden = !isHidden;
+            toggle.textContent = isHidden ? "Hide details" : "View details";
+            toggle.setAttribute("aria-expanded", String(isHidden));
+        });
 
         leaderboardList.appendChild(row);
     });
