@@ -10,9 +10,16 @@
     <div class="app-shell">
         <header class="hero">
             <div class="hero-copy">
-                <p class="eyebrow">UNC Charlotte Sustainability Challenge</p>
-                <h1>EcoQuest: Campus Adventure</h1>
-                <p class="subtitle">Turn daily eco habits into coins, streaks, and campus rewards.</p>
+                <div class="brand-lockup">
+                    <div class="campus-logo">
+                        <img src="assets/uncc-logo.png" alt="UNC Charlotte logo">
+                    </div>
+                    <div>
+                        <p class="eyebrow">UNC Charlotte Sustainability Challenge</p>
+                        <h1>EcoQuest: Campus Adventure</h1>
+                        <p class="subtitle">Turn campus habits into points, rewards, and dorm competition.</p>
+                    </div>
+                </div>
             </div>
             <div class="hero-stats">
                 <div class="stat-chip">
@@ -44,6 +51,7 @@
                 <div class="progress-track">
                     <div class="progress-fill" id="tier-progress-fill"></div>
                 </div>
+                <button class="reset-button" id="reset-progress">Reset demo progress</button>
             </div>
         </section>
 
@@ -76,7 +84,6 @@
                             </div>
                             <span class="boss-score" id="boss-score">18%</span>
                         </div>
-                        <p class="muted">Your floor is battling the Energy Goblin by completing low-effort energy-saving actions.</p>
                         <div class="progress-track boss-track">
                             <div class="progress-fill boss-fill" id="boss-progress-fill"></div>
                         </div>
@@ -90,6 +97,13 @@
                                 <strong>Late-night cafe discount</strong>
                             </div>
                         </div>
+                        <div class="weekly-heading">
+                            <div>
+                                <p class="panel-label">Weekly Challenge Path</p>
+                                <h3>This Week's Quests</h3>
+                            </div>
+                        </div>
+                        <div class="quest-list" id="weekly-quest-list"></div>
                     </section>
                 </div>
             </section>
@@ -98,10 +112,14 @@
                 <section class="card">
                     <div class="card-heading">
                         <div>
-                            <p class="panel-label">Social Proof</p>
-                            <h3>Dorm Leaderboard</h3>
+                            <p class="panel-label">Dorm Competition</p>
+                            <h3>Residence Hall Rankings</h3>
                         </div>
                         <span class="ranking-pill" id="player-rank-pill">Rank #4</span>
+                    </div>
+                    <div class="shop-balance leaderboard-summary">
+                        <span>Top dorm this week</span>
+                        <strong id="top-dorm-label">Maple Hall</strong>
                     </div>
                     <div class="leaderboard-list" id="leaderboard-list"></div>
                 </section>
@@ -114,22 +132,18 @@
                     <section class="card stat-card">
                         <p class="panel-label">Food Saved</p>
                         <h3 id="food-saved">0 meals</h3>
-                        <p class="muted">Leftovers used or shared before they spoiled.</p>
                     </section>
                     <section class="card stat-card">
                         <p class="panel-label">Energy Reduced</p>
                         <h3 id="energy-saved">0.0 kWh</h3>
-                        <p class="muted">Lights and appliances turned off when not needed.</p>
                     </section>
                     <section class="card stat-card">
                         <p class="panel-label">Water Conserved</p>
                         <h3 id="water-saved">0 gal</h3>
-                        <p class="muted">Shorter showers and smarter everyday choices.</p>
                     </section>
                     <section class="card stat-card">
                         <p class="panel-label">Carbon Avoided</p>
                         <h3 id="carbon-saved">0.0 lbs CO2</h3>
-                        <p class="muted">Small habits adding up across campus living spaces.</p>
                     </section>
                 </div>
             </section>
@@ -149,11 +163,25 @@
                     <section class="card side-card">
                         <div class="card-heading">
                             <div>
-                                <p class="panel-label">Unlocked Perks</p>
-                                <h3>Reward Inventory</h3>
+                                <p class="panel-label">Coin Shop</p>
+                                <h3>Redeem Your Coins</h3>
                             </div>
                         </div>
+                        <div class="shop-balance">
+                            <span>Available to spend</span>
+                            <strong id="shop-coin-balance">0 coins</strong>
+                        </div>
                         <div class="reward-list" id="reward-list"></div>
+                    </section>
+
+                    <section class="card redeemed-card">
+                        <div class="card-heading">
+                            <div>
+                                <p class="panel-label">Claimed Rewards</p>
+                                <h3>Your Inventory</h3>
+                            </div>
+                        </div>
+                        <div class="redeemed-list" id="redeemed-list"></div>
                     </section>
                 </div>
             </section>
@@ -174,6 +202,16 @@
             <button class="quest-action">Complete quest</button>
         </article>
     </template>
+
+    <div class="levelup-overlay" id="levelup-overlay" hidden>
+        <div class="levelup-modal">
+            <div class="confetti-layer" id="confetti-layer" aria-hidden="true"></div>
+            <p class="panel-label">Tier Unlocked</p>
+            <h2 id="levelup-title">Level up!</h2>
+            <p id="levelup-message">You reached a new EcoQuest tier.</p>
+            <button class="levelup-button" id="levelup-close">Keep playing</button>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
